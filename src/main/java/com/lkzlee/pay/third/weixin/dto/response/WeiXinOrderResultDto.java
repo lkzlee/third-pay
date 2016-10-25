@@ -1,23 +1,19 @@
-package com.lkzlee.pay.third.weixin.dto;
+package com.lkzlee.pay.third.weixin.dto.response;
 
 import java.sql.Timestamp;
-
-import com.lkzlee.pay.dto.AbstThirdPayDto;
 
 /**
  * 微信统一下单返回参数
  * @author lkzlee
  *
  */
-public class WeiXinOrderResultDto extends AbstThirdPayDto
+public class WeiXinOrderResultDto extends WeiXinBaseResultDto
 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String return_code;
-	private String return_msg;
 	private String appid;
 	private String mch_id;
 	private String device_info;
@@ -30,26 +26,6 @@ public class WeiXinOrderResultDto extends AbstThirdPayDto
 	private String prepay_id;
 	private String code_url;
 	private Timestamp timeStamp;
-
-	public String getReturn_code()
-	{
-		return return_code;
-	}
-
-	public void setReturn_code(String return_code)
-	{
-		this.return_code = return_code;
-	}
-
-	public String getReturn_msg()
-	{
-		return return_msg;
-	}
-
-	public void setReturn_msg(String return_msg)
-	{
-		this.return_msg = return_msg;
-	}
 
 	public String getAppid()
 	{

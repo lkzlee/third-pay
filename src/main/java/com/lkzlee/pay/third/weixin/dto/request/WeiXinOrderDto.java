@@ -1,4 +1,4 @@
-package com.lkzlee.pay.third.weixin.dto;
+package com.lkzlee.pay.third.weixin.dto.request;
 
 import com.lkzlee.pay.dto.AbstThirdPayDto;
 
