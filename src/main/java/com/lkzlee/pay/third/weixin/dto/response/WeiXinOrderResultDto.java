@@ -87,21 +87,25 @@ public class WeiXinOrderResultDto extends WeiXinBaseResultDto
 		this.result_code = result_code;
 	}
 
+	@Override
 	public String getErr_code()
 	{
 		return err_code;
 	}
 
+	@Override
 	public void setErr_code(String err_code)
 	{
 		this.err_code = err_code;
 	}
 
+	@Override
 	public String getErr_code_des()
 	{
 		return err_code_des;
 	}
 
+	@Override
 	public void setErr_code_des(String err_code_des)
 	{
 		this.err_code_des = err_code_des;
@@ -150,11 +154,10 @@ public class WeiXinOrderResultDto extends WeiXinBaseResultDto
 	@Override
 	public String toString()
 	{
-		return "WeiXinOrderResultDto [return_code=" + return_code + ", return_msg=" + return_msg + ", appid=" + appid
-				+ ", mch_id=" + mch_id + ", device_info=" + device_info + ", nonce_str=" + nonce_str + ", sign=" + sign
-				+ ", result_code=" + result_code + ", err_code=" + err_code + ", err_code_des=" + err_code_des
-				+ ", trade_type=" + trade_type + ", prepay_id=" + prepay_id + ", code_url=" + code_url + ", timeStamp="
-				+ timeStamp + "]";
+		return "WeiXinOrderResultDto [appid=" + appid + ", mch_id=" + mch_id + ", device_info=" + device_info
+				+ ", nonce_str=" + nonce_str + ", sign=" + sign + ", result_code=" + result_code + ", err_code="
+				+ err_code + ", err_code_des=" + err_code_des + ", trade_type=" + trade_type + ", prepay_id="
+				+ prepay_id + ", code_url=" + code_url + ", timeStamp=" + timeStamp + "]";
 	}
 
 }
