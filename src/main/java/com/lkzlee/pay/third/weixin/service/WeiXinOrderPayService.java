@@ -1,5 +1,6 @@
 package com.lkzlee.pay.third.weixin.service;
 
+import com.lkzlee.pay.dto.AbstThirdPayDto;
 import com.lkzlee.pay.service.PayService;
 
 /**
@@ -9,5 +10,5 @@ import com.lkzlee.pay.service.PayService;
  */
 public interface WeiXinOrderPayService extends PayService
 {
-
+	public Object queryRefundOrderService(AbstThirdPayDto refundParamDto);
 }
