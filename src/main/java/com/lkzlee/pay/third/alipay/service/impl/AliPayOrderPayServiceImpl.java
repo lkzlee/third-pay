@@ -2,11 +2,18 @@ package com.lkzlee.pay.third.alipay.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.TreeMap;
 
+import com.lkzlee.pay.bean.AlipayConfigBean;
+import com.lkzlee.pay.constant.ConfigConstant;
 import com.lkzlee.pay.dto.AbstThirdPayDto;
+import com.lkzlee.pay.enums.SignTypeEnum;
 import com.lkzlee.pay.exceptions.BusinessException;
 import com.lkzlee.pay.third.alipay.dto.AliPayOrderDto;
+import com.lkzlee.pay.third.alipay.dto.AliPayRefundOrderDto;
 import com.lkzlee.pay.third.alipay.service.AliPayOrderPayService;
+import com.lkzlee.pay.utils.CommonUtil;
+import com.lkzlee.pay.utils.TreeMapUtil;
 
 public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 {
@@ -20,65 +27,87 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		if (payParamDto == null || !(payParamDto instanceof AliPayOrderDto))
 			throw new BusinessException("payParamDto 不能转换为支付宝dto，请检查");
 		AliPayOrderDto aliPayDto = (AliPayOrderDto) payParamDto;
-		StringBuffer payUrl = new StringBuffer(ALIPAY_GATEWAY_NEW);
-		payUrl.append("service=" + URLEncoder.encode(aliPayDto.getService(), "UTF-8"));
-		payUrl.append("partner=" + URLEncoder.encode(aliPayDto.getService(), "UTF-8"));
-		payUrl.append("_input_charset=" + aliPayDto.getService());
-		payUrl.append("sign_type=" + aliPayDto.getService());
-		payUrl.append("sign=" + aliPayDto.getService());
-		payUrl.append("notify_url=" + aliPayDto.getService());
-		payUrl.append("return_url=" + aliPayDto.getService());
-		payUrl.append("out_trade_no=" + aliPayDto.getService());
-		payUrl.append("subject=" + aliPayDto.getService());
-		payUrl.append("payment_type=" + aliPayDto.getService());
-		payUrl.append("total_fee=" + aliPayDto.getService());
-		payUrl.append("seller_id=" + aliPayDto.getService());
-		//		payUrl.append("seller_email=" + aliPayDto.getService());
-		//		payUrl.append("seller_account_name=" + aliPayDto.getService());
-		payUrl.append("buyer_id=" + aliPayDto.getService());
-		payUrl.append("buyer_email=" + aliPayDto.getService());
-		//		payUrl.append("buyer_account_name=" + aliPayDto.getService());
-		payUrl.append("price=" + aliPayDto.getService());
-		payUrl.append("quantity=" + aliPayDto.getService());
-		payUrl.append("body=" + aliPayDto.getService());
-		payUrl.append("show_url=" + aliPayDto.getService());
-		payUrl.append("paymethod=" + aliPayDto.getService());
-		payUrl.append("enable_paymethod=" + aliPayDto.getService());
-		payUrl.append("anti_phishing_key=" + aliPayDto.getService());
-		payUrl.append("exter_invoke_ip=" + aliPayDto.getService());
-		payUrl.append("extra_common_param=" + aliPayDto.getService());
-		payUrl.append("it_b_pay=" + aliPayDto.getService());
-		payUrl.append("token=" + aliPayDto.getService());
-		payUrl.append("qr_pay_mode=" + aliPayDto.getService());
-		payUrl.append("qrcode_width=" + aliPayDto.getService());
-		payUrl.append("need_buyer_realnamed=" + aliPayDto.getService());
-		payUrl.append("hb_fq_param=" + aliPayDto.getService());
-		payUrl.append("goods_type=" + aliPayDto.getService());
-		return payUrl.toString();
+		TreeMap<String, String> paramTreeMap = TreeMapUtil.getInitTreeMapAsc();
+		paramTreeMap.put("service", "create_direct_pay_by_user");
+		paramTreeMap.put("partner",
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PARTNER, "2088102168716583"));
+		paramTreeMap.put("_input_charset", "UTF-8");
+		paramTreeMap.put("notify_url", URLEncoder.encode(aliPayDto.getNotify_url(), "UTF-8"));
+		paramTreeMap.put("return_url", URLEncoder.encode(aliPayDto.getReturn_url(), "UTF-8"));
+		paramTreeMap.put("out_trade_no", URLEncoder.encode(aliPayDto.getOut_trade_no(), "UTF-8"));
+		paramTreeMap.put("subject", URLEncoder.encode(aliPayDto.getSubject(), "UTF-8"));
+		paramTreeMap.put("payment_type", "1");
+		paramTreeMap.put("total_fee", URLEncoder.encode(CommonUtil.formatMoney(aliPayDto.getTotal_fee()), "UTF-8"));
+		paramTreeMap.put("seller_id",
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_SELLER_ID, "2088102168716583"));
+		//signTreeMap.put("seller_email=" + aliPayDto.getService());
+		//signTreeMap.put("seller_account_name=" + aliPayDto.getService());
+		//signTreeMap.put("buyer_id=");
+		//signTreeMap.put("buyer_email=" + aliPayDto.getService());
+		//signTreeMap.put("buyer_account_name=" + aliPayDto.getService());
+		//signTreeMap.put("price=" + aliPayDto.getService());
+		//signTreeMap.put("quantity=" + aliPayDto.getService());
+		paramTreeMap.put("body", URLEncoder.encode(aliPayDto.getBody(), "UTF-8"));
+		//signTreeMap.put("show_url=");
+		paramTreeMap.put("paymethod", "directPay");
+		String enable_paymethod = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_ENABLE_PAY_METHOD,
+				"directPay^bankPay^cartoon^cash");
+		paramTreeMap.put("enable_paymethod", URLEncoder.encode(enable_paymethod, "UTF-8"));
+		//signTreeMap.put("anti_phishing_key=" + aliPayDto.getService());
+		paramTreeMap.put("exter_invoke_ip", URLEncoder.encode(aliPayDto.getExter_invoke_ip(), "UTF-8"));
+		//signTreeMap.put("extra_common_param=" + aliPayDto.getService());
+		/**
+		 * 取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。该参数数值不接受小数点，如1.5h，可转换为90m。
+		 */
+		String it_b_pay = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_IT_PAY_TIMEOUT, "1h");
+		paramTreeMap.put("it_b_pay", it_b_pay);
+		//		signTreeMap.put("token=" + aliPayDto.getService());
+		//		signTreeMap.put("qr_pay_mode=" + aliPayDto.getService());
+		//		signTreeMap.put("qrcode_width=" + aliPayDto.getService());
+		//		signTreeMap.put("need_buyer_realnamed=" + aliPayDto.getService());
+		//		signTreeMap.put("hb_fq_param=" + aliPayDto.getService());
+		/***
+		 * 商品类型：1表示实物类商品 0表示虚拟类商品
+		 */
+		paramTreeMap.put("goods_type", "0");
+		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
+		String source = TreeMapUtil.getTreeMapString(paramTreeMap);
+		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
+		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
+		paramTreeMap.put("sign", signResult);
+		return ALIPAY_GATEWAY_NEW + TreeMapUtil.getTreeMapString(paramTreeMap);
 	}
 
-	public Object refundToPayService(AbstThirdPayDto refundParamDto) throws UnsupportedEncodingException
+	public Object refundToPayService(AbstThirdPayDto paramDto) throws UnsupportedEncodingException
 	{
 
-		if (refundParamDto == null || !(refundParamDto instanceof AliPayOrderDto))
+		if (paramDto == null || !(paramDto instanceof AliPayOrderDto))
 			throw new BusinessException("payParamDto 不能转换为支付宝dto，请检查");
-		AliPayOrderDto aliPayDto = (AliPayOrderDto) refundParamDto;
-		StringBuffer payUrl = new StringBuffer(ALIPAY_GATEWAY_NEW);
-		payUrl.append("service=refund_fastpay_by_platform_pwd");
-		payUrl.append("partner=" + URLEncoder.encode(aliPayDto.getService(), "UTF-8"));
-		payUrl.append("_input_charset=UTF-8");
-		payUrl.append("sign_type=MD5" + aliPayDto.getService());
-		payUrl.append("sign=" + aliPayDto.getService());
-		payUrl.append("notify_url=" + aliPayDto.getService());
+		AliPayRefundOrderDto refundParamDto = (AliPayRefundOrderDto) paramDto;
+		TreeMap<String, String> paramTreeMap = TreeMapUtil.getInitTreeMapAsc();
+		paramTreeMap.put("service", "refund_fastpay_by_platform_pwd");
+		paramTreeMap.put("partner",
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PARTNER, "2088102168716583"));
+		paramTreeMap.put("_input_charset", "UTF-8");
 
-		payUrl.append("seller_email=" + aliPayDto.getService());
-		payUrl.append("seller_user_id=" + aliPayDto.getService());
-		payUrl.append("refund_date=" + aliPayDto.getService());
-		payUrl.append("batch_no=" + aliPayDto.getService());
-		payUrl.append("batch_num=" + aliPayDto.getService());
+		paramTreeMap.put("notify_url", URLEncoder.encode(refundParamDto.getNotify_url(), "UTF-8"));
 
-		payUrl.append("detail_data=" + aliPayDto.getService());
-
-		return payUrl.toString();
+		//		paramTreeMap.put("seller_email=" + aliPayDto.getService());
+		paramTreeMap.put("seller_user_id",
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_SELLER_ID, "2088102168716583"));
+		/***
+		 * 	
+		退款请求的当前时间。格式为：yyyy-MM-dd HH:mm:ss。
+		 */
+		paramTreeMap.put("refund_date=", URLEncoder.encode(refundParamDto.getRefund_date(), "UTF-8"));
+		paramTreeMap.put("batch_no=", URLEncoder.encode(refundParamDto.getBatch_no(), "UTF-8"));
+		paramTreeMap.put("batch_num=", URLEncoder.encode(refundParamDto.getBatch_num(), "UTF-8"));
+		paramTreeMap.put("detail_data=", URLEncoder.encode(refundParamDto.getRefund_date(), "UTF-8"));
+		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
+		String source = TreeMapUtil.getTreeMapString(paramTreeMap);
+		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
+		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
+		paramTreeMap.put("sign", signResult);
+		return ALIPAY_GATEWAY_NEW + TreeMapUtil.getTreeMapString(paramTreeMap);
 	}
 }
