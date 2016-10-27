@@ -1,80 +1,26 @@
 package com.lkzlee.pay.third.weixin.dto.request;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
-
-public class WeiXinRefundOrderDto extends AbstThirdPayDto
+public class WeiXinRefundOrderDto extends WeiXinBaseDto
 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String appid;
-	private String mch_id;
-	private String device_info;
-	private String nonce_str;
-	private String sign;
 	/***
 	 * 二选一transaction_id out_trade_no
 	 */
 	private String transaction_id;
 	private String out_trade_no;
+	/***
+	 * 商户退款单号
+	 */
 	private String out_refund_no;
 	private Integer total_fee;
 	private Integer refund_fee;
 	private String refund_fee_type;
 	private String op_user_id;
 	private String refund_account;
-
-	public String getAppid()
-	{
-		return appid;
-	}
-
-	public void setAppid(String appid)
-	{
-		this.appid = appid;
-	}
-
-	public String getMch_id()
-	{
-		return mch_id;
-	}
-
-	public void setMch_id(String mch_id)
-	{
-		this.mch_id = mch_id;
-	}
-
-	public String getDevice_info()
-	{
-		return device_info;
-	}
-
-	public void setDevice_info(String device_info)
-	{
-		this.device_info = device_info;
-	}
-
-	public String getNonce_str()
-	{
-		return nonce_str;
-	}
-
-	public void setNonce_str(String nonce_str)
-	{
-		this.nonce_str = nonce_str;
-	}
-
-	public String getSign()
-	{
-		return sign;
-	}
-
-	public void setSign(String sign)
-	{
-		this.sign = sign;
-	}
 
 	public String getTransaction_id()
 	{
@@ -159,11 +105,10 @@ public class WeiXinRefundOrderDto extends AbstThirdPayDto
 	@Override
 	public String toString()
 	{
-		return "WeiXinRefundOrderDto [appid=" + appid + ", mch_id=" + mch_id + ", device_info=" + device_info
-				+ ", nonce_str=" + nonce_str + ", sign=" + sign + ", transaction_id=" + transaction_id
-				+ ", out_trade_no=" + out_trade_no + ", out_refund_no=" + out_refund_no + ", total_fee=" + total_fee
-				+ ", refund_fee=" + refund_fee + ", refund_fee_type=" + refund_fee_type + ", op_user_id=" + op_user_id
-				+ ", refund_account=" + refund_account + "]";
+		return "WeiXinRefundOrderDto [transaction_id=" + transaction_id + ", out_trade_no=" + out_trade_no
+				+ ", out_refund_no=" + out_refund_no + ", total_fee=" + total_fee + ", refund_fee=" + refund_fee
+				+ ", refund_fee_type=" + refund_fee_type + ", op_user_id=" + op_user_id + ", refund_account="
+				+ refund_account + "]";
 	}
 
 }

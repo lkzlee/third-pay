@@ -21,7 +21,7 @@ public enum SignTypeEnum
 			{
 				source += privateKey;
 			}
-			return MD5Utils.getMD5(source);
+			return MD5Utils.getMD5(source).toUpperCase();
 		}
 	},
 	RSA("RSA", "RSA签名算法")

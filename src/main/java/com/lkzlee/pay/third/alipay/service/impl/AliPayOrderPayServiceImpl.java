@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
 import com.lkzlee.pay.bean.AlipayConfigBean;
 import com.lkzlee.pay.constant.ConfigConstant;
@@ -19,6 +20,7 @@ import com.lkzlee.pay.utils.CommonUtil;
 import com.lkzlee.pay.utils.HttpClientUtil;
 import com.lkzlee.pay.utils.TreeMapUtil;
 
+@Service("aliPayOrderPayService")
 public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 {
 	private final static Log LOG = LogFactory.getLog(AliPayOrderPayServiceImpl.class);
@@ -27,6 +29,9 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 	*/
 	private static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do";
 
+	/***
+	 * 支付宝下单，拼接一个下单url，让用户访问这个url
+	 */
 	public Object addThirdPayOrderService(AbstThirdPayDto payParamDto) throws UnsupportedEncodingException
 	{
 		if (payParamDto == null || !(payParamDto instanceof AliPayOrderDto))
@@ -85,6 +90,9 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		return payUrl;
 	}
 
+	/***
+	 * 支付宝退款url，异步通知退款
+	 */
 	public Object refundToPayService(AbstThirdPayDto paramDto) throws UnsupportedEncodingException
 	{
 

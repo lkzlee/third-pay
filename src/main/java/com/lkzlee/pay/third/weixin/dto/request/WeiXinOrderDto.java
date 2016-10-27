@@ -1,27 +1,23 @@
 package com.lkzlee.pay.third.weixin.dto.request;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
-
 /**
  * 微信统一下单参数
  * @author lkzlee
  *
  */
-public class WeiXinOrderDto extends AbstThirdPayDto
+public class WeiXinOrderDto extends WeiXinBaseDto
 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String appid;
-	private String mch_id;
-	private String device_info;
-	private String nonce_str;
-	private String sign;
 	private String body;
 	private String detail;
 	private String attach;
+	/***
+	 * 下单传递参数，必传
+	 */
 	private String out_trade_no;
 	private String fee_type;
 	private Integer total_fee;
@@ -34,56 +30,6 @@ public class WeiXinOrderDto extends AbstThirdPayDto
 	private String product_id;
 	private String limit_pay;
 	private String openid;
-
-	public String getAppid()
-	{
-		return appid;
-	}
-
-	public void setAppid(String appid)
-	{
-		this.appid = appid;
-	}
-
-	public String getMch_id()
-	{
-		return mch_id;
-	}
-
-	public void setMch_id(String mch_id)
-	{
-		this.mch_id = mch_id;
-	}
-
-	public String getDevice_info()
-	{
-		return device_info;
-	}
-
-	public void setDevice_info(String device_info)
-	{
-		this.device_info = device_info;
-	}
-
-	public String getNonce_str()
-	{
-		return nonce_str;
-	}
-
-	public void setNonce_str(String nonce_str)
-	{
-		this.nonce_str = nonce_str;
-	}
-
-	public String getSign()
-	{
-		return sign;
-	}
-
-	public void setSign(String sign)
-	{
-		this.sign = sign;
-	}
 
 	public String getBody()
 	{
@@ -238,11 +184,11 @@ public class WeiXinOrderDto extends AbstThirdPayDto
 	@Override
 	public String toString()
 	{
-		return "WeiXinOrderDto [appid=" + appid + ", mch_id=" + mch_id + ", device_info=" + device_info
-				+ ", nonce_str=" + nonce_str + ", sign=" + sign + ", body=" + body + ", detail=" + detail + ", attach="
-				+ attach + ", out_trade_no=" + out_trade_no + ", fee_type=" + fee_type + ", total_fee=" + total_fee
-				+ ", spbill_create_ip=" + spbill_create_ip + ", time_start=" + time_start + ", time_expire="
-				+ time_expire + ", goods_tag=" + goods_tag + ", notify_url=" + notify_url + ", trade_type="
-				+ trade_type + ", product_id=" + product_id + ", limit_pay=" + limit_pay + ", openid=" + openid + "]";
+		return "WeiXinOrderDto [body=" + body + ", detail=" + detail + ", attach=" + attach + ", out_trade_no="
+				+ out_trade_no + ", fee_type=" + fee_type + ", total_fee=" + total_fee + ", spbill_create_ip="
+				+ spbill_create_ip + ", time_start=" + time_start + ", time_expire=" + time_expire + ", goods_tag="
+				+ goods_tag + ", notify_url=" + notify_url + ", trade_type=" + trade_type + ", product_id="
+				+ product_id + ", limit_pay=" + limit_pay + ", openid=" + openid + "]";
 	}
+
 }

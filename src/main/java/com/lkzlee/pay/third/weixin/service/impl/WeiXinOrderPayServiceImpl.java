@@ -1,10 +1,17 @@
 package com.lkzlee.pay.third.weixin.service.impl;
 
+import java.util.TreeMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
+import com.lkzlee.pay.bean.WeiXinConfigBean;
+import com.lkzlee.pay.constant.ConfigConstant;
 import com.lkzlee.pay.dto.AbstThirdPayDto;
+import com.lkzlee.pay.enums.SignTypeEnum;
 import com.lkzlee.pay.exceptions.BusinessException;
+import com.lkzlee.pay.third.weixin.dto.request.WeiXinBaseDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinOrderDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinQueryRefundDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinRefundOrderDto;
@@ -12,9 +19,12 @@ import com.lkzlee.pay.third.weixin.dto.response.WeiXinOrderResultDto;
 import com.lkzlee.pay.third.weixin.dto.response.WeiXinQueryRefundResultDto;
 import com.lkzlee.pay.third.weixin.dto.response.WeiXinRefundResultDto;
 import com.lkzlee.pay.third.weixin.service.WeiXinOrderPayService;
+import com.lkzlee.pay.utils.CommonUtil;
 import com.lkzlee.pay.utils.HttpClientUtil;
+import com.lkzlee.pay.utils.TreeMapUtil;
 import com.lkzlee.pay.utils.XstreamUtil;
 
+@Service("weiXinOrderPayService")
 public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 {
 	private final static String WEI_XIN_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
@@ -30,11 +40,8 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		try
 		{
 			WeiXinOrderDto weiXinDto = (WeiXinOrderDto) payParamDto;
-			String xmlText = XstreamUtil.toXml(weiXinDto);
-			LOG.info("#请求微信下单地址url:" + WEI_XIN_UNIFIED_ORDER_URL + ",参数paramXml:" + xmlText);
-			String responseXml = HttpClientUtil.post(WEI_XIN_UNIFIED_ORDER_URL, xmlText);
-			LOG.info("#请求微信下单返回 orderResponseXml:" + responseXml);
-			WeiXinOrderResultDto weixinResult = XstreamUtil.fromXml(responseXml, WeiXinOrderResultDto.class);
+			WeiXinOrderResultDto weixinResult = sendWeiXinRequestXml(WEI_XIN_UNIFIED_ORDER_URL, weiXinDto,
+					WeiXinOrderResultDto.class);
 			return weixinResult;
 		}
 		catch (Exception e)
@@ -52,11 +59,22 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		try
 		{
 			WeiXinRefundOrderDto refundWXDto = (WeiXinRefundOrderDto) refundParamDto;
-			String xmlText = XstreamUtil.toXml(refundWXDto);
-			LOG.info("#请求微信下单地址refund url:" + WEIXIN_REFUND_ORDER_URL + ",参数refundXml:" + xmlText);
-			String responseXml = HttpClientUtil.post(WEIXIN_REFUND_ORDER_URL, xmlText);
-			LOG.info("#请求微信退款返回 refundResponseXml:" + responseXml);
-			WeiXinRefundResultDto responseDto = XstreamUtil.fromXml(responseXml, WeiXinRefundResultDto.class);
+			TreeMap<String, String> paramMap = TreeMapUtil.getInitTreeMapAsc();
+			setBaseInfo(refundWXDto, paramMap);
+			paramMap.put("out_trade_no", refundWXDto.getOut_trade_no());
+			paramMap.put("out_refund_no", refundWXDto.getOut_refund_no());
+			paramMap.put("total_fee", refundWXDto.getTotal_fee() + "");
+			paramMap.put("refund_fee", refundWXDto.getRefund_fee() + "");
+			paramMap.put("refund_fee_type", refundWXDto.getRefund_fee_type());
+			paramMap.put("op_user_id", refundWXDto.getOp_user_id());
+			paramMap.put("refund_account", refundWXDto.getRefund_account());
+
+			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+			String sign = SignTypeEnum.MD5.sign(source, null);
+			refundWXDto.setSign(sign);
+			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, refundWXDto,
+					WeiXinRefundResultDto.class);
 			return responseDto;
 		}
 		catch (Exception e)
@@ -64,6 +82,29 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			LOG.fatal("请求微信退款出错，异常原因：" + e.getMessage(), e);
 		}
 		return null;
+	}
+
+	private void setBaseInfo(WeiXinBaseDto baseDto, TreeMap<String, String> paramMap)
+	{
+		paramMap.put("appid", baseDto.getAppid());
+		paramMap.put("mch_id", baseDto.getMch_id());
+		/***
+		 * PC网页或公众号内支付请传"WEB"
+		 */
+		paramMap.put("device_info", "WEB");
+		String nonceStr = CommonUtil.generateUUID();
+		baseDto.setNonce_str(nonceStr);
+		paramMap.put("nonce_str", nonceStr);
+	}
+
+	private <T> T sendWeiXinRequestXml(String url, Object refundWXDto, Class clazz) throws Exception
+	{
+		String xmlText = XstreamUtil.toXml(refundWXDto);
+		LOG.info("#请求微信地址 url:" + url + ",参数refundXml:" + xmlText);
+		String responseXml = HttpClientUtil.post(url, xmlText);
+		LOG.info("#请求微信返回responseXml:" + responseXml);
+		T responseDto = XstreamUtil.fromXml(responseXml, clazz);
+		return responseDto;
 	}
 
 	public Object queryRefundOrderService(AbstThirdPayDto refundParamDto)
@@ -74,11 +115,15 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		try
 		{
 			WeiXinQueryRefundDto refundWXDto = (WeiXinQueryRefundDto) refundParamDto;
-			String xmlText = XstreamUtil.toXml(refundWXDto);
-			LOG.info("#请求微信退款查询refund query url:" + WEIXIN_QUERY_REFUND_ORDER_URL + ",参数refundXml:" + xmlText);
-			String responseXml = HttpClientUtil.post(WEIXIN_QUERY_REFUND_ORDER_URL, xmlText);
-			LOG.info("#请求微信退款查询返回 refundResponseXml:" + responseXml);
-			WeiXinQueryRefundResultDto responseDto = XstreamUtil.fromXml(responseXml, WeiXinQueryRefundResultDto.class);
+			TreeMap<String, String> paramMap = TreeMapUtil.getInitTreeMapAsc();
+			setBaseInfo(refundWXDto, paramMap);
+			paramMap.put("out_refund_no", refundWXDto.getOut_refund_no());
+			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+			String sign = SignTypeEnum.MD5.sign(source, null);
+			refundWXDto.setSign(sign);
+			WeiXinQueryRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_QUERY_REFUND_ORDER_URL, refundWXDto,
+					WeiXinQueryRefundResultDto.class);
 			return responseDto;
 		}
 		catch (Exception e)
