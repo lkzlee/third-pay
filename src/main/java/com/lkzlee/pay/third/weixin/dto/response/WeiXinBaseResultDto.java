@@ -17,6 +17,7 @@ public class WeiXinBaseResultDto implements Serializable
 	private String return_msg;
 	private String err_code;
 	private String err_code_des;
+	private String result_code;
 
 	public String getReturn_code()
 	{
@@ -58,10 +59,21 @@ public class WeiXinBaseResultDto implements Serializable
 		this.err_code_des = err_code_des;
 	}
 
+	public String getResult_code()
+	{
+		return result_code;
+	}
+
+	public void setResult_code(String result_code)
+	{
+		this.result_code = result_code;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "WeiXinBaseResultDto [return_code=" + return_code + ", return_msg=" + return_msg + ", err_code="
-				+ err_code + ", err_code_des=" + err_code_des + "]";
+				+ err_code + ", err_code_des=" + err_code_des + ", result_code=" + result_code + "]";
 	}
+
 }
