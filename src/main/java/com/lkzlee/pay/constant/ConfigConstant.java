@@ -12,7 +12,13 @@ public class ConfigConstant
 	 * 支付宝相关参数
 	 */
 	public static final String ALIPAY_PARTNER = "partner";
+	/***
+	 * 支付宝商户私钥
+	 */
 	public static final String ALIPAY_PRIVATE_KEY = "aliPayPrivateKey";
+	/***
+	 * 支付宝商户ID
+	 */
 	public static final String ALIPAY_SELLER_ID = "sellerId";
 	/***
 	 * 可不配置，默认值= directPay^bankPay^cartoon^cash
@@ -26,6 +32,17 @@ public class ConfigConstant
 	/***
 	 * 微信相关配置参数
 	 */
+	/***
+	 * 微信商户私钥
+	 */
 	public static final String WEIXIN_APP_KEY = "weiXinAppKey";
+	/***
+	 * 微信商户id
+	 */
+	public static final String WEIXIN_MCH_ID = "weixinMchId";
+	/**
+	 * 微信appId
+	 */
+	public static final String WEIXIN_APP_ID = "weiXinAppId";
 
 }

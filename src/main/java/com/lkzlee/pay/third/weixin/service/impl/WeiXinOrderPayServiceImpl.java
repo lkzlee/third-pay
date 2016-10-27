@@ -1,5 +1,6 @@
 package com.lkzlee.pay.third.weixin.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -155,16 +156,19 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 	}
 
 	private void setBaseInfo(WeiXinBaseDto baseDto, TreeMap<String, String> paramMap)
+			throws UnsupportedEncodingException
 	{
-		paramMap.put("appid", baseDto.getAppid());
-		paramMap.put("mch_id", baseDto.getMch_id());
+		paramMap.put("appid",
+				URLEncoder.encode(WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_ID), "UTF-8"));
+		paramMap.put("mch_id",
+				URLEncoder.encode(WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_MCH_ID), "UTF-8"));
 		/***
 		 * PC网页或公众号内支付请传"WEB"
 		 */
 		paramMap.put("device_info", "WEB");
 		String nonceStr = CommonUtil.generateUUID();
-		baseDto.setNonce_str(nonceStr);
-		paramMap.put("nonce_str", nonceStr);
+		//		baseDto.setNonce_str(nonceStr);
+		paramMap.put("nonce_str", URLEncoder.encode(nonceStr, "UTF-8"));
 	}
 
 	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Class clazz) throws Exception

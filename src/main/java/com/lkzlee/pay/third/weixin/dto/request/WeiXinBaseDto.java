@@ -8,16 +8,17 @@ public class WeiXinBaseDto extends AbstThirdPayDto
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	/***
 	 * 此参数无需传递
 	 */
-	private String appid;
-	private String mch_id;
-	private String device_info;
-	private String nonce_str;
-	private String sign;
+	//	private String appid;
+	//	private String mch_id;
+	//	private String device_info;
+	//	private String nonce_str;
+	//	private String sign;
 
-	public String getAppid()
+	/*public String getAppid()
 	{
 		return appid;
 	}
@@ -72,6 +73,6 @@ public class WeiXinBaseDto extends AbstThirdPayDto
 	{
 		return "WeiXinBaseDto [appid=" + appid + ", mch_id=" + mch_id + ", device_info=" + device_info + ", nonce_str="
 				+ nonce_str + ", sign=" + sign + "]";
-	}
+	}*/
 
 }
