@@ -1,5 +1,8 @@
 package com.lkzlee.pay.third.weixin.service.impl;
 
+import java.lang.reflect.Field;
+import java.net.URLEncoder;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
@@ -40,8 +43,31 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		try
 		{
 			WeiXinOrderDto weiXinDto = (WeiXinOrderDto) payParamDto;
-			WeiXinOrderResultDto weixinResult = sendWeiXinRequestXml(WEI_XIN_UNIFIED_ORDER_URL, weiXinDto,
+			TreeMap<String, String> paramMap = TreeMapUtil.getInitTreeMapAsc();
+			setBaseInfo(weiXinDto, paramMap);
+			paramMap.put("body", URLEncoder.encode(weiXinDto.getBody(), "UTF-8"));
+			//			paramMap.put("detail", weiXinDto.getDetail());
+			//			paramMap.put("attach", weiXinDto.getTotal_fee() + "");
+			paramMap.put("out_trade_no", URLEncoder.encode(weiXinDto.getOut_trade_no(), "UTF-8"));
+			paramMap.put("fee_type", URLEncoder.encode(weiXinDto.getFee_type(), "UTF-8"));
+			paramMap.put("total_fee", URLEncoder.encode(weiXinDto.getTotal_fee() + "", "UTF-8"));
+			paramMap.put("spbill_create_ip", URLEncoder.encode(weiXinDto.getSpbill_create_ip(), "UTF-8"));
+			paramMap.put("time_start", URLEncoder.encode(weiXinDto.getTime_start(), "UTF-8"));
+			paramMap.put("time_expire", URLEncoder.encode(weiXinDto.getTime_expire(), "UTF-8"));
+			//			paramMap.put("goods_tag", weiXinDto.getRefund_account());
+			paramMap.put("notify_url", URLEncoder.encode(weiXinDto.getNotify_url(), "UTF-8"));
+			paramMap.put("trade_type", URLEncoder.encode(weiXinDto.getTrade_type(), "UTF-8"));
+			paramMap.put("product_id", URLEncoder.encode(weiXinDto.getProduct_id(), "UTF-8"));
+			//			paramMap.put("limit_pay", weiXinDto.getRefund_account());
+			//			paramMap.put("openid", weiXinDto.getRefund_account());
+
+			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+			String sign = SignTypeEnum.MD5.sign(source, null);
+			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
+			WeiXinOrderResultDto weixinResult = sendWeiXinRequestXml(WEI_XIN_UNIFIED_ORDER_URL, paramMap,
 					WeiXinOrderResultDto.class);
+			monitorResponseText(weixinResult);
 			return weixinResult;
 		}
 		catch (Exception e)
@@ -49,6 +75,49 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			LOG.fatal("请求微信下单出错，异常原因：" + e.getMessage(), e);
 		}
 		return null;
+	}
+
+	private void monitorResponseText(Object weixinResult) throws IllegalArgumentException, IllegalAccessException
+	{
+
+		String sign = null;
+		TreeMap<String, String> sourceMap = TreeMapUtil.getInitTreeMapAsc();
+		setSourceMapInfo(weixinResult, sourceMap, weixinResult.getClass());
+		if (sourceMap.containsKey("sign"))
+			sign = sourceMap.get("sign");
+		sourceMap.remove("sign");
+		String source = TreeMapUtil.getTreeMapString(sourceMap) + "&key="
+				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+		String calcSign = SignTypeEnum.MD5.sign(source, null);
+		if (!calcSign.equals(sign))
+			throw new BusinessException("校验返回签名错误，请查看，");
+
+	}
+
+	private void setSourceMapInfo(Object weixinResult, TreeMap<String, String> sourceMap, Class clazz)
+			throws IllegalAccessException
+	{
+		if (weixinResult == null)
+			return;
+		Field fs[] = weixinResult.getClass().getDeclaredFields();
+		for (int i = 0; null != fs && i < fs.length; i++)
+		{
+			if ("serialVersionUID".equals(fs[i].getName()))
+			{
+				continue;
+			}
+			fs[i].setAccessible(true);
+			Object value = fs[i].get(weixinResult);
+			if (value == null)
+			{
+				continue;
+			}
+			sourceMap.put(fs[i].getName(), value + "");
+		}
+		Class superClass = weixinResult.getClass().getSuperclass();
+		if (superClass == null)
+			return;
+		setSourceMapInfo(weixinResult, sourceMap, superClass);
 	}
 
 	public Object refundToPayService(AbstThirdPayDto refundParamDto)
@@ -61,20 +130,21 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			WeiXinRefundOrderDto refundWXDto = (WeiXinRefundOrderDto) refundParamDto;
 			TreeMap<String, String> paramMap = TreeMapUtil.getInitTreeMapAsc();
 			setBaseInfo(refundWXDto, paramMap);
-			paramMap.put("out_trade_no", refundWXDto.getOut_trade_no());
-			paramMap.put("out_refund_no", refundWXDto.getOut_refund_no());
-			paramMap.put("total_fee", refundWXDto.getTotal_fee() + "");
-			paramMap.put("refund_fee", refundWXDto.getRefund_fee() + "");
-			paramMap.put("refund_fee_type", refundWXDto.getRefund_fee_type());
-			paramMap.put("op_user_id", refundWXDto.getOp_user_id());
-			paramMap.put("refund_account", refundWXDto.getRefund_account());
+			paramMap.put("out_trade_no", URLEncoder.encode(refundWXDto.getOut_trade_no(), "UTF-8"));
+			paramMap.put("out_refund_no", URLEncoder.encode(refundWXDto.getOut_refund_no(), "UTF-8"));
+			paramMap.put("total_fee", URLEncoder.encode(refundWXDto.getTotal_fee() + "", "UTF-8"));
+			paramMap.put("refund_fee", URLEncoder.encode(refundWXDto.getRefund_fee() + "", "UTF-8"));
+			paramMap.put("refund_fee_type", URLEncoder.encode(refundWXDto.getRefund_fee_type(), "UTF-8"));
+			paramMap.put("op_user_id", URLEncoder.encode(refundWXDto.getOp_user_id(), "UTF-8"));
+			//			paramMap.put("refund_account", refundWXDto.getRefund_account());
 
 			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
 					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
-			refundWXDto.setSign(sign);
-			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, refundWXDto,
+			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
+			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, paramMap,
 					WeiXinRefundResultDto.class);
+			monitorResponseText(responseDto);
 			return responseDto;
 		}
 		catch (Exception e)
@@ -97,10 +167,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		paramMap.put("nonce_str", nonceStr);
 	}
 
-	private <T> T sendWeiXinRequestXml(String url, Object refundWXDto, Class clazz) throws Exception
+	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Class clazz) throws Exception
 	{
-		String xmlText = XstreamUtil.toXml(refundWXDto);
-		LOG.info("#请求微信地址 url:" + url + ",参数refundXml:" + xmlText);
+		String xmlText = XstreamUtil.toXml(paramMap);
+		LOG.info("#请求微信地址 url:" + url + ",参数wxXml:" + xmlText);
 		String responseXml = HttpClientUtil.post(url, xmlText);
 		LOG.info("#请求微信返回responseXml:" + responseXml);
 		T responseDto = XstreamUtil.fromXml(responseXml, clazz);
@@ -117,13 +187,14 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			WeiXinQueryRefundDto refundWXDto = (WeiXinQueryRefundDto) refundParamDto;
 			TreeMap<String, String> paramMap = TreeMapUtil.getInitTreeMapAsc();
 			setBaseInfo(refundWXDto, paramMap);
-			paramMap.put("out_refund_no", refundWXDto.getOut_refund_no());
+			paramMap.put("out_refund_no", URLEncoder.encode(refundWXDto.getOut_refund_no(), "UTF-8"));
 			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
 					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
-			refundWXDto.setSign(sign);
-			WeiXinQueryRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_QUERY_REFUND_ORDER_URL, refundWXDto,
+			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
+			WeiXinQueryRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_QUERY_REFUND_ORDER_URL, paramMap,
 					WeiXinQueryRefundResultDto.class);
+			monitorResponseText(responseDto);
 			return responseDto;
 		}
 		catch (Exception e)

@@ -22,7 +22,13 @@ public class WeiXinOrderDto extends WeiXinBaseDto
 	private String fee_type;
 	private Integer total_fee;
 	private String spbill_create_ip;
+	/***
+	 * 订单生成时间，格式为yyyyMMddHHmmss
+	 */
 	private String time_start;
+	/**
+	 * 订单生成时间，格式为yyyyMMddHHmmss
+	 */
 	private String time_expire;
 	private String goods_tag;
 	private String notify_url;
