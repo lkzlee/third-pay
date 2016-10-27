@@ -1,4 +1,4 @@
-package com.lkzlee.pay.third.alipay.dto;
+package com.lkzlee.pay.third.alipay.dto.request;
 
 import com.lkzlee.pay.dto.AbstThirdPayDto;
 

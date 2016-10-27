@@ -4,23 +4,28 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.TreeMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.lkzlee.pay.bean.AlipayConfigBean;
 import com.lkzlee.pay.constant.ConfigConstant;
 import com.lkzlee.pay.dto.AbstThirdPayDto;
 import com.lkzlee.pay.enums.SignTypeEnum;
 import com.lkzlee.pay.exceptions.BusinessException;
-import com.lkzlee.pay.third.alipay.dto.AliPayOrderDto;
-import com.lkzlee.pay.third.alipay.dto.AliPayRefundOrderDto;
+import com.lkzlee.pay.third.alipay.dto.request.AliPayOrderDto;
+import com.lkzlee.pay.third.alipay.dto.request.AliPayRefundOrderDto;
 import com.lkzlee.pay.third.alipay.service.AliPayOrderPayService;
 import com.lkzlee.pay.utils.CommonUtil;
+import com.lkzlee.pay.utils.HttpClientUtil;
 import com.lkzlee.pay.utils.TreeMapUtil;
 
 public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 {
+	private final static Log LOG = LogFactory.getLog(AliPayOrderPayServiceImpl.class);
 	/**
 	* 支付宝提供给商户的服务接入网关URL(新)
 	*/
-	private static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
+	private static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do";
 
 	public Object addThirdPayOrderService(AbstThirdPayDto payParamDto) throws UnsupportedEncodingException
 	{
@@ -75,7 +80,9 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
 		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
 		paramTreeMap.put("sign", signResult);
-		return ALIPAY_GATEWAY_NEW + TreeMapUtil.getTreeMapString(paramTreeMap);
+		String payUrl = ALIPAY_GATEWAY_NEW + "?" + TreeMapUtil.getTreeMapString(paramTreeMap);
+		LOG.info("@@支付宝下单支付url=" + payUrl);
+		return payUrl;
 	}
 
 	public Object refundToPayService(AbstThirdPayDto paramDto) throws UnsupportedEncodingException
@@ -108,6 +115,18 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
 		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
 		paramTreeMap.put("sign", signResult);
-		return ALIPAY_GATEWAY_NEW + TreeMapUtil.getTreeMapString(paramTreeMap);
+
+		try
+		{
+			LOG.info("@@支付宝退款请求参数url=" + ALIPAY_GATEWAY_NEW + " | param=" + TreeMapUtil.getTreeMapString(paramTreeMap));
+			String respConetent = HttpClientUtil.post(ALIPAY_GATEWAY_NEW, paramTreeMap);
+			LOG.info("@@支付宝退款请求同步响应返回结果respConetent=" + respConetent);
+			return respConetent;
+		}
+		catch (Exception e)
+		{
+			LOG.fatal("请求支付宝退款异常，异常原因:" + e.getMessage() + ",参数：" + paramTreeMap + ",url=" + ALIPAY_GATEWAY_NEW);
+		}
+		return null;
 	}
 }
