@@ -2,6 +2,8 @@ package com.lkzlee.pay.bean;
 
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -15,6 +17,7 @@ public abstract class AbstConfigBean
 
 	private final static Log LOG = LogFactory.getLog(AbstConfigBean.class);
 
+	@PostConstruct
 	public void init()
 	{
 		try
