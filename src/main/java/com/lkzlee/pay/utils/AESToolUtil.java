@@ -9,7 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.netease.lottery.base.exception.BusinessException;
+import com.lkzlee.pay.exceptions.BusinessException;
 
 /*******************************************************************************
  * AES加解密算法

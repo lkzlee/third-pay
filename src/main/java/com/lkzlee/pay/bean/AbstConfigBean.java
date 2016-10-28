@@ -8,9 +8,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.stereotype.Service;
 
 import com.lkzlee.pay.exceptions.BusinessException;
 
+@Service
 public abstract class AbstConfigBean
 {
 	private static Properties props = null;
