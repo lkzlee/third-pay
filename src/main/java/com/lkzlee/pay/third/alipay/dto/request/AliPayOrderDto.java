@@ -1,6 +1,6 @@
 package com.lkzlee.pay.third.alipay.dto.request;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 
 /***
  * 支付宝即时支付参数定义

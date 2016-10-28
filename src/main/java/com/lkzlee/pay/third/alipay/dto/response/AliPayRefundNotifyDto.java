@@ -1,13 +1,12 @@
 package com.lkzlee.pay.third.alipay.dto.response;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
 
 /***
  * 支付宝即时支付通知返回参数定义
  * @author lkzlee
  *
  */
-public class AliPayRefundNotifyDto extends AbstThirdPayDto
+public class AliPayRefundNotifyDto extends AbstAliPayBaseDto
 {
 	private static final long serialVersionUID = 1L;
 

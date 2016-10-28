@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * @author lkzlee
  *
  */
-public class WeiXinOrderResultDto extends WeiXinBaseResultDto
+public class WeiXinOrderResultDto extends AbstWeiXinPayBaseDto
 {
 
 	/**

@@ -5,7 +5,7 @@ package com.lkzlee.pay.third.weixin.dto.response;
  * @author lkzlee
  *
  */
-public class WeiXinQueryRefundResultDto extends WeiXinBaseResultDto
+public class WeiXinQueryRefundResultDto extends AbstWeiXinPayBaseDto
 {
 
 	/**

@@ -1,7 +1,6 @@
 package com.lkzlee.pay.third.weixin.service.impl;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.lkzlee.pay.bean.WeiXinConfigBean;
 import com.lkzlee.pay.constant.ConfigConstant;
-import com.lkzlee.pay.dto.AbstThirdPayDto;
 import com.lkzlee.pay.enums.SignTypeEnum;
 import com.lkzlee.pay.exceptions.BusinessException;
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinBaseDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinOrderDto;
 import com.lkzlee.pay.third.weixin.dto.request.WeiXinQueryRefundDto;
@@ -83,7 +82,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 
 		String sign = null;
 		TreeMap<String, String> sourceMap = TreeMapUtil.getInitTreeMapAsc();
-		setSourceMapInfo(weixinResult, sourceMap, weixinResult.getClass());
+		TreeMapUtil.setFiledParamToMapInfo(weixinResult, sourceMap, weixinResult.getClass());
 		if (sourceMap.containsKey("sign"))
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
@@ -93,32 +92,6 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		if (!calcSign.equals(sign))
 			throw new BusinessException("校验返回签名错误，请查看，");
 
-	}
-
-	private void setSourceMapInfo(Object weixinResult, TreeMap<String, String> sourceMap, Class clazz)
-			throws IllegalAccessException
-	{
-		if (weixinResult == null)
-			return;
-		Field fs[] = weixinResult.getClass().getDeclaredFields();
-		for (int i = 0; null != fs && i < fs.length; i++)
-		{
-			if ("serialVersionUID".equals(fs[i].getName()))
-			{
-				continue;
-			}
-			fs[i].setAccessible(true);
-			Object value = fs[i].get(weixinResult);
-			if (value == null)
-			{
-				continue;
-			}
-			sourceMap.put(fs[i].getName(), value + "");
-		}
-		Class superClass = weixinResult.getClass().getSuperclass();
-		if (superClass == null)
-			return;
-		setSourceMapInfo(weixinResult, sourceMap, superClass);
 	}
 
 	public Object refundToPayService(AbstThirdPayDto refundParamDto)

@@ -1,6 +1,6 @@
 package com.lkzlee.pay.third.weixin.dto.request;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 
 public class WeiXinBaseDto extends AbstThirdPayDto
 {

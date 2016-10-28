@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author lkzlee
  *
  */
-public class WeiXinPayNotifyResultDto extends WeiXinBaseResultDto implements Serializable
+public class WeiXinPayNotifyResultDto extends AbstWeiXinPayBaseDto implements Serializable
 {
 
 	private static final long serialVersionUID = 1L;

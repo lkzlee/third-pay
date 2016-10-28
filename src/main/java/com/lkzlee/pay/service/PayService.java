@@ -2,7 +2,7 @@ package com.lkzlee.pay.service;
 
 import java.io.UnsupportedEncodingException;
 
-import com.lkzlee.pay.dto.AbstThirdPayDto;
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 
 public interface PayService
 {

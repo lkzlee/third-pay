@@ -1,6 +1,6 @@
 package com.lkzlee.pay.third.weixin.dto.response;
 
-public class WeiXinRefundResultDto extends WeiXinBaseResultDto
+public class WeiXinRefundResultDto extends AbstWeiXinPayBaseDto
 {
 
 	/**

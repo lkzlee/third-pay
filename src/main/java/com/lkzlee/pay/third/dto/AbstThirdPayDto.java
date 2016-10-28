@@ -1,4 +1,4 @@
-package com.lkzlee.pay.dto;
+package com.lkzlee.pay.third.dto;
 
 import java.io.Serializable;
 

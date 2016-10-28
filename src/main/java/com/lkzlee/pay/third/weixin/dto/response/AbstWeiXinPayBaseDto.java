@@ -2,12 +2,14 @@ package com.lkzlee.pay.third.weixin.dto.response;
 
 import java.io.Serializable;
 
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
+
 /**
  * 微信返回基本参数封装
- * @author liyongchao
+ * @author lkzlee
  *
  */
-public class WeiXinBaseResultDto implements Serializable
+public class AbstWeiXinPayBaseDto extends AbstThirdPayDto implements Serializable
 {
 	/**
 	 * 
