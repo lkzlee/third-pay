@@ -24,6 +24,7 @@ public class AlipayConfigBean
 		try
 		{
 			props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("alipay-config.properties"));
+			LOG.info("alipay load props加载配置 props=" + props);
 		}
 		catch (Exception e)
 		{

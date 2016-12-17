@@ -1,14 +1,17 @@
 package com.lkzlee.pay.utils;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.Dom4JDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class XstreamUtil
 {
-	private static XStream xstream = new XStream(new Dom4JDriver());
+	private static XStream xstream = new XStream(new DomDriver());
 	private static Log LOG = LogFactory.getLog(XstreamUtil.class);
 
 	/***
@@ -55,12 +58,17 @@ public class XstreamUtil
 	 * @param obj
 	 * @return
 	 */
-	public static String toXml(Object obj)
+	public static String toXml(Map<String, String> obj)
 	{
 		try
 		{
-			xstream.alias("xml", obj.getClass());
-			return xstream.toXML(obj);
+			StringBuilder sb = new StringBuilder("<xml>");
+			for (Entry<String, String> ent : obj.entrySet())
+			{
+				sb.append("<" + ent.getKey() + ">" + ent.getValue() + "</" + ent.getKey() + ">");
+			}
+			sb.append("</xml>");
+			return sb.toString();
 		}
 		catch (Exception e)
 		{

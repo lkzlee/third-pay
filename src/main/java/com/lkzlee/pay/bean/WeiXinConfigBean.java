@@ -24,6 +24,7 @@ public class WeiXinConfigBean
 		try
 		{
 			props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("wxpay-config.properties"));
+			LOG.info("weixin load props加载配置 props=" + props);
 		}
 		catch (Exception e)
 		{

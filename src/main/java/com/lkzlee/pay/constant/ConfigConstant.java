@@ -29,6 +29,12 @@ public class ConfigConstant
 	 * 取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。该参数数值不接受小数点，如1.5h，可转换为90m。
 	 */
 	public static final String ALIPAY_IT_PAY_TIMEOUT = "it_pay_timeout";
+
+	public static final String ALIPAY_NOTIFY_URL = "aliPayNotfiyUrl";
+
+	public static final String ALIPAY_RETURN_URL = "aliPayReturnUrl";
+
+	public static final String ALIPAY_REFUND_URL = "aliPayRefundNotifyUrl";
 	/***
 	 * 微信相关配置参数
 	 */
@@ -44,5 +50,7 @@ public class ConfigConstant
 	 * 微信appId
 	 */
 	public static final String WEIXIN_APP_ID = "weiXinAppId";
+
+	public static final String WEIXIN_PAY_NOTIFY_URL = "weiXinPayNotifyUrl";
 
 }
