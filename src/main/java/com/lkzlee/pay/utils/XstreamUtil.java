@@ -13,10 +13,10 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class XstreamUtil
 {
 	private static Log LOG = LogFactory.getLog(XstreamUtil.class);
+	private final static XStream xstream = new XStream(new DomDriver());
 
 	public static void main(String[] args)
 	{
-		XStream xstream = new XStream(new DomDriver());
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>" + "" + "" + "" + "<return_code><![CDATA[FAIL]]></return_code> ");
 		sb.append("<return_msg>" + "" + "<![CDATA[appid参数长度有误]]>" + "</return_msg>");
@@ -24,6 +24,38 @@ public class XstreamUtil
 		xstream.alias("xml", WeiXinOrderResultDto.class);
 		WeiXinOrderResultDto resultDto = (WeiXinOrderResultDto) xstream.fromXML(sb.toString());
 		System.out.println(resultDto);
+	}
+
+	public static <T> T fromXml(String xml, Class clz)
+	{
+		try
+		{
+			xml = xml.replaceAll("\\s+", "");
+			xstream.alias("xml", clz);
+			T t = (T) xstream.fromXML(xml);
+			return t;
+		}
+		catch (Exception e)
+		{
+			LOG.fatal("解析xml出错。请检查,clz=" + clz, e);
+			return null;
+		}
+	}
+
+	public static <T> T fromXml(String xml, String rootName, Class clz)
+	{
+		try
+		{
+			xml = xml.replaceAll("\\s+", "");
+			xstream.alias(rootName, clz);
+			T t = (T) xstream.fromXML(xml);
+			return t;
+		}
+		catch (Exception e)
+		{
+			LOG.fatal("解析xml出错。请检查,rootName=" + rootName + ",clz=" + clz, e);
+			return null;
+		}
 	}
 
 	/***

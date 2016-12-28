@@ -120,7 +120,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
 			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, paramMap,
-					new WeiXinRefundResultDto());
+					WeiXinRefundResultDto.class);
 			monitorResponseText(responseDto);
 			return responseDto;
 		}
@@ -147,16 +147,23 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		paramMap.put("nonce_str", URLEncoder.encode(nonceStr, "UTF-8"));
 	}
 
-	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Object obj) throws Exception
+	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Class clz) throws Exception
 	{
 		String xmlText = XstreamUtil.toXml(paramMap);
 		LOG.info("#请求微信地址 url:" + url + ",参数wxXml:" + xmlText);
 		String responseXml = HttpClientUtil.post(url, xmlText);
 		LOG.info("#请求微信返回responseXml:" + responseXml);
+		return XstreamUtil.fromXml(responseXml, clz);
+	}
+
+	public static void main(String[] args)
+	{
+
+		String response = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[appid参数长度有误]]></return_msg></xml>";
 		XStream xstream = new XStream(new DomDriver());
-		xstream.alias("xml", obj.getClass());
-		T responseDto = (T) xstream.fromXML(responseXml, obj.getClass());
-		return responseDto;
+		xstream.alias("xml", WeiXinOrderResultDto.class);
+		WeiXinOrderResultDto responseDto = (WeiXinOrderResultDto) xstream.fromXML(response);
+		System.out.println(responseDto);
 	}
 
 	public Object queryRefundOrderService(AbstThirdPayDto refundParamDto)
