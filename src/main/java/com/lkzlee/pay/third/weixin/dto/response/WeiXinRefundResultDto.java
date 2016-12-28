@@ -1,12 +1,22 @@
 package com.lkzlee.pay.third.weixin.dto.response;
 
-public class WeiXinRefundResultDto extends AbstWeiXinPayBaseDto
+import java.io.Serializable;
+
+import com.lkzlee.pay.third.dto.AbstThirdPayDto;
+
+public class WeiXinRefundResultDto extends AbstThirdPayDto implements Serializable
 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String return_code;
+	private String return_msg;
+	private String err_code;
+	private String err_code_des;
+	private String result_code;
+
 	private String appid;
 	private String mch_id;
 	private String device_info;
@@ -27,6 +37,56 @@ public class WeiXinRefundResultDto extends AbstWeiXinPayBaseDto
 	private String fee_type;
 	private Integer cash_fee;
 	private Integer cash_refund_fee;
+
+	public String getReturn_code()
+	{
+		return return_code;
+	}
+
+	public void setReturn_code(String return_code)
+	{
+		this.return_code = return_code;
+	}
+
+	public String getReturn_msg()
+	{
+		return return_msg;
+	}
+
+	public void setReturn_msg(String return_msg)
+	{
+		this.return_msg = return_msg;
+	}
+
+	public String getErr_code()
+	{
+		return err_code;
+	}
+
+	public void setErr_code(String err_code)
+	{
+		this.err_code = err_code;
+	}
+
+	public String getErr_code_des()
+	{
+		return err_code_des;
+	}
+
+	public void setErr_code_des(String err_code_des)
+	{
+		this.err_code_des = err_code_des;
+	}
+
+	public String getResult_code()
+	{
+		return result_code;
+	}
+
+	public void setResult_code(String result_code)
+	{
+		this.result_code = result_code;
+	}
 
 	public String getAppid()
 	{
@@ -201,12 +261,14 @@ public class WeiXinRefundResultDto extends AbstWeiXinPayBaseDto
 	@Override
 	public String toString()
 	{
-		return "WeiXinRefundResultDto [appid=" + appid + ", mch_id=" + mch_id + ", device_info=" + device_info
-				+ ", nonce_str=" + nonce_str + ", sign=" + sign + ", transaction_id=" + transaction_id
-				+ ", out_trade_no=" + out_trade_no + ", out_refund_no=" + out_refund_no + ", refund_id=" + refund_id
-				+ ", refund_channel=" + refund_channel + ", refund_fee=" + refund_fee + ", settlement_refund_fee="
-				+ settlement_refund_fee + ", total_fee=" + total_fee + ", settlement_total_fee=" + settlement_total_fee
-				+ ", fee_type=" + fee_type + ", cash_fee=" + cash_fee + ", cash_refund_fee=" + cash_refund_fee + "]";
+		return "WeiXinRefundResultDto [return_code=" + return_code + ", return_msg=" + return_msg + ", err_code="
+				+ err_code + ", err_code_des=" + err_code_des + ", result_code=" + result_code + ", appid=" + appid
+				+ ", mch_id=" + mch_id + ", device_info=" + device_info + ", nonce_str=" + nonce_str + ", sign=" + sign
+				+ ", transaction_id=" + transaction_id + ", out_trade_no=" + out_trade_no + ", out_refund_no="
+				+ out_refund_no + ", refund_id=" + refund_id + ", refund_channel=" + refund_channel + ", refund_fee="
+				+ refund_fee + ", settlement_refund_fee=" + settlement_refund_fee + ", total_fee=" + total_fee
+				+ ", settlement_total_fee=" + settlement_total_fee + ", fee_type=" + fee_type + ", cash_fee="
+				+ cash_fee + ", cash_refund_fee=" + cash_refund_fee + "]";
 	}
 
 }

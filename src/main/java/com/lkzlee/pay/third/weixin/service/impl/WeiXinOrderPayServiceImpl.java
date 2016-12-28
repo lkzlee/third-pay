@@ -26,6 +26,8 @@ import com.lkzlee.pay.utils.CommonUtil;
 import com.lkzlee.pay.utils.HttpClientUtil;
 import com.lkzlee.pay.utils.TreeMapUtil;
 import com.lkzlee.pay.utils.XstreamUtil;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 @Service("weiXinOrderPayService")
 public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
@@ -83,6 +85,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		String sign = null;
 		TreeMap<String, String> sourceMap = TreeMapUtil.getInitTreeMapAsc();
 		TreeMapUtil.setFiledParamToMapInfo(weixinResult, sourceMap, weixinResult.getClass());
+		LOG.info("解析的类Map=" + sourceMap);
 		if (sourceMap.containsKey("sign"))
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
@@ -117,7 +120,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
 			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, paramMap,
-					WeiXinRefundResultDto.class);
+					new WeiXinRefundResultDto());
 			monitorResponseText(responseDto);
 			return responseDto;
 		}
@@ -144,13 +147,15 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		paramMap.put("nonce_str", URLEncoder.encode(nonceStr, "UTF-8"));
 	}
 
-	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Class clazz) throws Exception
+	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Object obj) throws Exception
 	{
 		String xmlText = XstreamUtil.toXml(paramMap);
 		LOG.info("#请求微信地址 url:" + url + ",参数wxXml:" + xmlText);
 		String responseXml = HttpClientUtil.post(url, xmlText);
 		LOG.info("#请求微信返回responseXml:" + responseXml);
-		T responseDto = XstreamUtil.fromXml(responseXml, clazz);
+		XStream xstream = new XStream(new DomDriver());
+		xstream.alias("xml", obj.getClass());
+		T responseDto = (T) xstream.fromXML(responseXml, obj.getClass());
 		return responseDto;
 	}
 
