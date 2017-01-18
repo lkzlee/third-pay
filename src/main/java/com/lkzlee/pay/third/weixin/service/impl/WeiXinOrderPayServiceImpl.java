@@ -37,6 +37,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 	private final static String WEIXIN_QUERY_REFUND_ORDER_URL = "https://api.mch.weixin.qq.com/pay/refundquery";
 	private final static Log LOG = LogFactory.getLog(WeiXinOrderPayServiceImpl.class);
 
+	@Override
 	public Object addThirdPayOrderService(AbstThirdPayDto payParamDto)
 	{
 		if (payParamDto == null || !(payParamDto instanceof WeiXinOrderDto))
@@ -64,7 +65,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			//			paramMap.put("openid", weiXinDto.getRefund_account());
 
 			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
-					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
 			WeiXinOrderResultDto weixinResult = sendWeiXinRequestXml(WEI_XIN_UNIFIED_ORDER_URL, paramMap,
@@ -90,13 +91,14 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
 		String source = TreeMapUtil.getTreeMapString(sourceMap) + "&key="
-				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 		String calcSign = SignTypeEnum.MD5.sign(source, null);
 		if (!calcSign.equals(sign))
 			throw new BusinessException("校验返回签名错误，请查看，");
 
 	}
 
+	@Override
 	public Object refundToPayService(AbstThirdPayDto refundParamDto)
 	{
 		if (refundParamDto == null || !(refundParamDto instanceof WeiXinRefundOrderDto))
@@ -116,7 +118,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			//			paramMap.put("refund_account", refundWXDto.getRefund_account());
 
 			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
-					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
 			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, paramMap,
@@ -166,6 +168,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		System.out.println(responseDto);
 	}
 
+	@Override
 	public Object queryRefundOrderService(AbstThirdPayDto refundParamDto)
 	{
 		if (refundParamDto == null || !(refundParamDto instanceof WeiXinQueryRefundDto))
@@ -178,7 +181,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			setBaseInfo(refundWXDto, paramMap);
 			paramMap.put("out_refund_no", URLEncoder.encode(refundWXDto.getOut_refund_no(), "UTF-8"));
 			String source = TreeMapUtil.getTreeMapString(paramMap) + "&key="
-					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", URLEncoder.encode(sign, "UTF-8"));
 			WeiXinQueryRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_QUERY_REFUND_ORDER_URL, paramMap,

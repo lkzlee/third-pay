@@ -42,6 +42,11 @@ public class ConfigConstant
 	 * 微信商户私钥
 	 */
 	public static final String WEIXIN_APP_KEY = "weiXinAppKey";
+
+	/***
+	 * 微信支付的私钥
+	 */
+	public static final String WEIXIN_PAY_SIGN_KEY = "weiXinPaySignKey";
 	/***
 	 * 微信商户id
 	 */
