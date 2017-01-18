@@ -17,7 +17,7 @@ import com.lkzlee.pay.third.alipay.dto.request.AliPayRefundOrderDto;
 import com.lkzlee.pay.third.alipay.service.AliPayOrderPayService;
 import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 import com.lkzlee.pay.utils.CommonUtil;
-import com.lkzlee.pay.utils.HttpClientUtil;
+import com.lkzlee.pay.utils.HttpKit;
 import com.lkzlee.pay.utils.TreeMapUtil;
 
 @Service("aliPayOrderPayService")
@@ -32,6 +32,7 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 	/***
 	 * 支付宝下单，拼接一个下单url，让用户访问这个url
 	 */
+	@Override
 	public Object addThirdPayOrderService(AbstThirdPayDto payParamDto) throws UnsupportedEncodingException
 	{
 		if (payParamDto == null || !(payParamDto instanceof AliPayOrderDto))
@@ -93,6 +94,7 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 	/***
 	 * 支付宝退款url，异步通知退款
 	 */
+	@Override
 	public Object refundToPayService(AbstThirdPayDto paramDto) throws UnsupportedEncodingException
 	{
 
@@ -127,7 +129,7 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		try
 		{
 			LOG.info("@@支付宝退款请求参数url=" + ALIPAY_GATEWAY_NEW + " | param=" + TreeMapUtil.getTreeMapString(paramTreeMap));
-			String respConetent = HttpClientUtil.post(ALIPAY_GATEWAY_NEW, paramTreeMap);
+			String respConetent = HttpKit.post(ALIPAY_GATEWAY_NEW, paramTreeMap);
 			LOG.info("@@支付宝退款请求同步响应返回结果respConetent=" + respConetent);
 			return respConetent;
 		}
