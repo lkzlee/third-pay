@@ -68,7 +68,7 @@ public abstract class WeiXinPayNotfiyController extends AbstPayNotfiyController
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
 		String source = TreeMapUtil.getTreeMapString(sourceMap) + "&key="
-				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_APP_KEY);
+				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 		String calcSign = SignTypeEnum.MD5.sign(source, null);
 		if (!calcSign.equals(sign))
 		{
