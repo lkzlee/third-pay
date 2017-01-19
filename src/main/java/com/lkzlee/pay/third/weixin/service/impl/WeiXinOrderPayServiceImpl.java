@@ -91,7 +91,9 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		sourceMap.remove("sign");
 		String source = TreeMapUtil.getTreeMapString(sourceMap) + "&key="
 				+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
+
 		String calcSign = SignTypeEnum.MD5.sign(source, null);
+		LOG.info("验签获取的source =" + source + ",calcSign=" + calcSign + ",sign=" + sign);
 		if (!calcSign.equals(sign))
 			throw new BusinessException("校验返回签名错误，请查看，");
 
