@@ -13,7 +13,27 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 {
 
 	/**
-	 * 
+	 * <xml>
+	 * <appid><![CDATA[wx855e27a3d08ed53f]]></appid>
+	 * <cash_fee><![CDATA[4]]></cash_fee>
+	 * <mch_id><![CDATA[1370242202]]></mch_id>
+	 * <nonce_str><![CDATA[B5YyNpWEpVHBauEU]]></nonce_str>
+	 * <out_refund_no_0><![CDATA[20170120130457OD7cfeb16a]]></out_refund_no_0>
+	 * <out_trade_no><![CDATA[20170120130457LD9ce72fe4]]></out_trade_no>
+	 * <refund_channel_0><![CDATA[ORIGINAL]]></refund_channel_0>
+	 * <refund_count>1</refund_count>
+	 * <refund_fee>2</refund_fee>
+	 * <refund_fee_0>2</refund_fee_0>
+	 * <refund_id_0><![CDATA[2008012001201701200761513892]]></refund_id_0>
+	 * <refund_recv_accout_0><![CDATA[支付用户的零钱]]></refund_recv_accout_0>
+	 * <refund_status_0><![CDATA[SUCCESS]]></refund_status_0>
+	 * <result_code><![CDATA[SUCCESS]]></result_code>
+	 * <return_code><![CDATA[SUCCESS]]></return_code>
+	 * <return_msg><![CDATA[OK]]></return_msg>
+	 * <sign><![CDATA[9929C64213DE6170F09669D263A50DCE]]></sign>
+	 * <total_fee><![CDATA[4]]></total_fee>
+	 * <transaction_id><![CDATA[4008012001201701206947904161]]></transaction_id>
+	 * </xml>
 	 */
 	private static final long serialVersionUID = 1L;
 	private String return_code;
@@ -41,6 +61,7 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	private String out_refund_no_0;
 	private String refund_id_0;
 	private String refund_channel_0;
+	private Integer refund_fee;
 	private Integer refund_fee_0;
 	private Integer settlement_refund_fee_0;
 	private String refund_account;
@@ -297,6 +318,16 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 		this.refund_recv_accout_0 = refund_recv_accout_0;
 	}
 
+	public Integer getRefund_fee()
+	{
+		return refund_fee;
+	}
+
+	public void setRefund_fee(Integer refund_fee)
+	{
+		this.refund_fee = refund_fee;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -306,9 +337,10 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 				+ ", transaction_id=" + transaction_id + ", out_trade_no=" + out_trade_no + ", total_fee=" + total_fee
 				+ ", settlement_total_fee=" + settlement_total_fee + ", fee_type=" + fee_type + ", cash_fee="
 				+ cash_fee + ", refund_count=" + refund_count + ", out_refund_no_0=" + out_refund_no_0
-				+ ", refund_id_0=" + refund_id_0 + ", refund_channel_0=" + refund_channel_0 + ", refund_fee_0="
-				+ refund_fee_0 + ", settlement_refund_fee_0=" + settlement_refund_fee_0 + ", refund_account="
-				+ refund_account + ", refund_status_0=" + refund_status_0 + ", refund_recv_accout_0="
-				+ refund_recv_accout_0 + "]";
+				+ ", refund_id_0=" + refund_id_0 + ", refund_channel_0=" + refund_channel_0 + ", refund_fee="
+				+ refund_fee + ", refund_fee_0=" + refund_fee_0 + ", settlement_refund_fee_0="
+				+ settlement_refund_fee_0 + ", refund_account=" + refund_account + ", refund_status_0="
+				+ refund_status_0 + ", refund_recv_accout_0=" + refund_recv_accout_0 + "]";
 	}
+
 }
