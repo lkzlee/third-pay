@@ -122,7 +122,7 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 					+ WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_SIGN_KEY);
 			String sign = SignTypeEnum.MD5.sign(source, null);
 			paramMap.put("sign", sign);
-			WeiXinRefundResultDto responseDto = sendWeiXinRequestXml(WEIXIN_REFUND_ORDER_URL, paramMap,
+			WeiXinRefundResultDto responseDto = sendWeiXinRequestXmlSSL(WEIXIN_REFUND_ORDER_URL, paramMap,
 					WeiXinRefundResultDto.class);
 			monitorResponseText(responseDto);
 			return responseDto;
@@ -146,6 +146,17 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		String nonceStr = CommonUtil.generateUUID();
 		//		baseDto.setNonce_str(nonceStr);
 		paramMap.put("nonce_str", nonceStr);
+	}
+
+	private <T> T sendWeiXinRequestXmlSSL(String url, TreeMap<String, String> paramMap, Class clz) throws Exception
+	{
+		String xmlText = XstreamUtil.toXml(paramMap);
+		LOG.info("#请求微信地址ssl url:" + url + ",参数wxXml:" + xmlText);
+		String caPath = WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_PAY_CERT_PATH);
+		String caPasswd = WeiXinConfigBean.getPayConfigValue(ConfigConstant.WEIXIN_MCH_ID);
+		String responseXml = HttpKit.postXmlWthCaByPKCS12(url, xmlText, caPath, caPasswd);
+		LOG.info("#请求微信返回ssl responseXml:" + responseXml);
+		return XstreamUtil.fromXml(responseXml, clz);
 	}
 
 	private <T> T sendWeiXinRequestXml(String url, Map<String, String> paramMap, Class clz) throws Exception

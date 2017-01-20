@@ -7,6 +7,8 @@ package com.lkzlee.pay.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -14,14 +16,29 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
@@ -195,5 +212,69 @@ public class HttpKit
 		}
 		System.out.println("--data result=" + line);
 		return line.toString();
+	}
+
+	public static String postXmlWthCaByPKCS12(String preOrderUrl, String xml, String caPath, String passwd)
+			throws Exception
+	{
+		SSLConnectionSocketFactory sslsf = getSSLContext(caPath, passwd);
+		CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+		try
+		{
+
+			HttpPost httpPost = new HttpPost(preOrderUrl);
+			StringEntity reqEntity = new StringEntity(xml, "UTF-8");
+			reqEntity.setContentType("application/x-www-form-urlencoded;charset=UTF-8");
+			httpPost.setEntity(reqEntity);
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			StringBuffer result = new StringBuffer();
+			try
+			{
+				HttpEntity entity = response.getEntity();
+				if (entity != null)
+				{
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent(),
+							"UTF-8"));
+					String text = null;
+					while ((text = bufferedReader.readLine()) != null)
+					{
+						result.append(text);
+					}
+
+				}
+				EntityUtils.consume(entity);
+				return result.toString();
+			}
+			finally
+			{
+				response.close();
+			}
+		}
+		finally
+		{
+			httpclient.close();
+		}
+	}
+
+	private static SSLConnectionSocketFactory getSSLContext(String caPath, String passwd) throws KeyStoreException,
+			FileNotFoundException, IOException, NoSuchAlgorithmException, CertificateException, KeyManagementException,
+			UnrecoverableKeyException
+	{
+		KeyStore keyStore = KeyStore.getInstance("PKCS12");
+		FileInputStream instream = new FileInputStream(new File(caPath));
+		try
+		{
+			keyStore.load(instream, passwd.toCharArray());
+		}
+		finally
+		{
+			instream.close();
+		}
+		// Trust own CA and all self-signed certs
+		SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, passwd.toCharArray()).build();
+		// Allow TLSv1 protocol only
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[]
+		{ "TLSv1" }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+		return sslsf;
 	}
 }

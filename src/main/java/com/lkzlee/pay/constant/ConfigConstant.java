@@ -48,6 +48,10 @@ public class ConfigConstant
 	 */
 	public static final String WEIXIN_PAY_SIGN_KEY = "weiXinPaySignKey";
 	/***
+	 * 微信证书路径
+	 */
+	public static final String WEIXIN_PAY_CERT_PATH = "weixinCertPath";
+	/***
 	 * 微信商户id
 	 */
 	public static final String WEIXIN_MCH_ID = "weixinMchId";

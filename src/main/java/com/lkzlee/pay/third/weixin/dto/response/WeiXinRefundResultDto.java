@@ -30,12 +30,14 @@ public class WeiXinRefundResultDto extends AbstThirdPayDto implements Serializab
 	private String out_refund_no;
 	private String refund_id;
 	private String refund_channel;
+	private String coupon_refund_fee;
 	private Integer refund_fee;
 	private Integer settlement_refund_fee;
 	private Integer total_fee;
 	private Integer settlement_total_fee;
 	private String fee_type;
 	private Integer cash_fee;
+	private String coupon_refund_count;
 	private Integer cash_refund_fee;
 
 	public String getReturn_code()
@@ -188,6 +190,26 @@ public class WeiXinRefundResultDto extends AbstThirdPayDto implements Serializab
 		this.refund_fee = refund_fee;
 	}
 
+	public String getCoupon_refund_fee()
+	{
+		return coupon_refund_fee;
+	}
+
+	public void setCoupon_refund_fee(String coupon_refund_fee)
+	{
+		this.coupon_refund_fee = coupon_refund_fee;
+	}
+
+	public String getCoupon_refund_count()
+	{
+		return coupon_refund_count;
+	}
+
+	public void setCoupon_refund_count(String coupon_refund_count)
+	{
+		this.coupon_refund_count = coupon_refund_count;
+	}
+
 	public String getRefund_id()
 	{
 		return refund_id;
@@ -265,10 +287,12 @@ public class WeiXinRefundResultDto extends AbstThirdPayDto implements Serializab
 				+ err_code + ", err_code_des=" + err_code_des + ", result_code=" + result_code + ", appid=" + appid
 				+ ", mch_id=" + mch_id + ", device_info=" + device_info + ", nonce_str=" + nonce_str + ", sign=" + sign
 				+ ", transaction_id=" + transaction_id + ", out_trade_no=" + out_trade_no + ", out_refund_no="
-				+ out_refund_no + ", refund_id=" + refund_id + ", refund_channel=" + refund_channel + ", refund_fee="
-				+ refund_fee + ", settlement_refund_fee=" + settlement_refund_fee + ", total_fee=" + total_fee
+				+ out_refund_no + ", refund_id=" + refund_id + ", refund_channel=" + refund_channel
+				+ ", coupon_refund_fee=" + coupon_refund_fee + ", refund_fee=" + refund_fee
+				+ ", settlement_refund_fee=" + settlement_refund_fee + ", total_fee=" + total_fee
 				+ ", settlement_total_fee=" + settlement_total_fee + ", fee_type=" + fee_type + ", cash_fee="
-				+ cash_fee + ", cash_refund_fee=" + cash_refund_fee + "]";
+				+ cash_fee + ", coupon_refund_count=" + coupon_refund_count + ", cash_refund_fee=" + cash_refund_fee
+				+ "]";
 	}
 
 }

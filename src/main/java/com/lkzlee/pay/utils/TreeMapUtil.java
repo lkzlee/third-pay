@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.lkzlee.pay.enums.SignTypeEnum;
 import com.lkzlee.pay.third.alipay.dto.response.AliPayRefundNotifyDto;
 
@@ -59,6 +61,10 @@ public class TreeMapUtil
 			fs[i].setAccessible(true);
 			Object value = fs[i].get(weixinResult);
 			if (value == null)
+			{
+				continue;
+			}
+			if ((value instanceof String) && StringUtils.isEmpty(value.toString()))
 			{
 				continue;
 			}
