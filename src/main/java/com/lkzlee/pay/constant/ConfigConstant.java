@@ -61,5 +61,9 @@ public class ConfigConstant
 	public static final String WEIXIN_APP_ID = "weiXinAppId";
 
 	public static final String WEIXIN_PAY_NOTIFY_URL = "weiXinPayNotifyUrl";
+	/***
+	 * 微信token
+	 */
+	public static final String WEIXIN_APP_TOKEN = "weiXinAppToken";
 
 }
