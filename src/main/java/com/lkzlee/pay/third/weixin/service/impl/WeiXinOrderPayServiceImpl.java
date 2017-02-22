@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.lkzlee.pay.bean.WeiXinConfigBean;
 import com.lkzlee.pay.constant.ConfigConstant;
@@ -59,7 +60,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			//			paramMap.put("goods_tag", weiXinDto.getRefund_account());
 			paramMap.put("notify_url", weiXinDto.getNotify_url());
 			paramMap.put("trade_type", weiXinDto.getTrade_type());
-			paramMap.put("product_id", weiXinDto.getProduct_id());
+			if (!StringUtils.isEmpty(weiXinDto.getProduct_id()))
+				paramMap.put("product_id", weiXinDto.getProduct_id());
+			if (!StringUtils.isEmpty(weiXinDto.getOpenid()))
+				paramMap.put("openid", weiXinDto.getOpenid());
 			//			paramMap.put("limit_pay", weiXinDto.getRefund_account());
 			//			paramMap.put("openid", weiXinDto.getRefund_account());
 
