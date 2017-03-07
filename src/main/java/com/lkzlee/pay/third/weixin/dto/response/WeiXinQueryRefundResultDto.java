@@ -372,7 +372,7 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 				+ refund_fee + ", refund_fee_0=" + refund_fee_0 + ", settlement_refund_fee_0="
 				+ settlement_refund_fee_0 + ", refund_account=" + refund_account + ", refund_status_0="
 				+ refund_status_0 + ", refund_recv_accout_0=" + refund_recv_accout_0 + ", refund_account_0="
-				+ refund_account_0 + "]";
+				+ refund_account_0 + ", refund_success_time_0=" + refund_success_time_0 + "]";
 	}
 
 }

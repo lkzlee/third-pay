@@ -36,7 +36,9 @@ public class XstreamUtil
 		try
 		{
 			XStream xstream = new XStream(new DomDriver());
-			xml = xml.replaceAll("\\s+", "");
+			//			xml = xml.replaceAll("\\s+", "");
+			xml = xml.trim();
+			xml = xml.replaceAll("(\r\n|\r|\n|\n\r)", "");
 			xstream.alias("xml", clz);
 			T t = (T) xstream.fromXML(xml);
 			return t;
@@ -53,7 +55,9 @@ public class XstreamUtil
 		try
 		{
 			XStream xstream = new XStream(new DomDriver());
-			xml = xml.replaceAll("\\s+", "");
+			//			xml = xml.replaceAll("\\s+", "");
+			xml = xml.trim();
+			xml = xml.replaceAll("(\r\n|\r|\n|\n\r)", "");
 			xstream.alias(rootName, clz);
 			T t = (T) xstream.fromXML(xml);
 			return t;

@@ -46,7 +46,7 @@ public class WeiXinConfigBean
 	{
 		if (props == null)
 		{
-			LOG.fatal("加载配置文件异常，初始化失败,key=" + key);
+			LOG.fatal("加载配置文件异常，未初始化完成或 初始化失败,key=" + key);
 			throw new BusinessException("props is null.加载配置文件失败");
 		}
 		if (!props.containsKey(key))
