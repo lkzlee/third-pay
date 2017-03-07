@@ -57,7 +57,7 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	private Integer settlement_total_fee;
 	private String fee_type;
 	private Integer cash_fee;
-	@Deprecated
+
 	private Integer refund_count;
 	private String out_refund_no_0;
 	private String refund_id_0;
@@ -65,11 +65,17 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	private Integer refund_fee;
 	private Integer refund_fee_0;
 	private Integer settlement_refund_fee_0;
+	@Deprecated
 	private String refund_account;
 	private String refund_status_0;
 	private String refund_recv_accout_0;
 
+	/***
+	 * 微信升级新加字段
+	 */
 	private String refund_account_0;
+
+	private String refund_success_time_0;
 
 	public String getAppid()
 	{
@@ -341,6 +347,16 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	public void setRefund_account_0(String refund_account_0)
 	{
 		this.refund_account_0 = refund_account_0;
+	}
+
+	public String getRefund_success_time_0()
+	{
+		return refund_success_time_0;
+	}
+
+	public void setRefund_success_time_0(String refund_success_time_0)
+	{
+		this.refund_success_time_0 = refund_success_time_0;
 	}
 
 	@Override
