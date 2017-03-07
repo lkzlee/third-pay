@@ -57,6 +57,7 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	private Integer settlement_total_fee;
 	private String fee_type;
 	private Integer cash_fee;
+	@Deprecated
 	private Integer refund_count;
 	private String out_refund_no_0;
 	private String refund_id_0;
@@ -67,6 +68,8 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 	private String refund_account;
 	private String refund_status_0;
 	private String refund_recv_accout_0;
+
+	private String refund_account_0;
 
 	public String getAppid()
 	{
@@ -288,11 +291,13 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 		this.settlement_refund_fee_0 = settlement_refund_fee_0;
 	}
 
+	@Deprecated
 	public String getRefund_account()
 	{
 		return refund_account;
 	}
 
+	@Deprecated
 	public void setRefund_account(String refund_account)
 	{
 		this.refund_account = refund_account;
@@ -328,6 +333,16 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 		this.refund_fee = refund_fee;
 	}
 
+	public String getRefund_account_0()
+	{
+		return refund_account_0;
+	}
+
+	public void setRefund_account_0(String refund_account_0)
+	{
+		this.refund_account_0 = refund_account_0;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -340,7 +355,8 @@ public class WeiXinQueryRefundResultDto extends AbstThirdPayDto implements Seria
 				+ ", refund_id_0=" + refund_id_0 + ", refund_channel_0=" + refund_channel_0 + ", refund_fee="
 				+ refund_fee + ", refund_fee_0=" + refund_fee_0 + ", settlement_refund_fee_0="
 				+ settlement_refund_fee_0 + ", refund_account=" + refund_account + ", refund_status_0="
-				+ refund_status_0 + ", refund_recv_accout_0=" + refund_recv_accout_0 + "]";
+				+ refund_status_0 + ", refund_recv_accout_0=" + refund_recv_accout_0 + ", refund_account_0="
+				+ refund_account_0 + "]";
 	}
 
 }
