@@ -76,6 +76,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 			monitorResponseText(weixinResult);
 			return weixinResult;
 		}
+		catch (BusinessException e)
+		{
+			throw e;
+		}
 		catch (Exception e)
 		{
 			LOG.fatal("请求微信下单出错，异常原因：" + e.getMessage(), e);
@@ -90,6 +94,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 		TreeMap<String, String> sourceMap = TreeMapUtil.getInitTreeMapAsc();
 		TreeMapUtil.setFiledParamToMapInfo(weixinResult, sourceMap, weixinResult.getClass());
 		LOG.info("解析的类Map=" + sourceMap);
+		if ("FAIL".equals(sourceMap.get("return_code")))
+		{
+			throw new BusinessException(sourceMap.get("return_msg"));
+		}
 		if (sourceMap.containsKey("sign"))
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
@@ -130,6 +138,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 					WeiXinRefundResultDto.class);
 			monitorResponseText(responseDto);
 			return responseDto;
+		}
+		catch (BusinessException e)
+		{
+			throw e;
 		}
 		catch (Exception e)
 		{
@@ -202,6 +214,10 @@ public class WeiXinOrderPayServiceImpl implements WeiXinOrderPayService
 					WeiXinQueryRefundResultDto.class);
 			monitorResponseText(responseDto);
 			return responseDto;
+		}
+		catch (BusinessException e)
+		{
+			throw e;
 		}
 		catch (Exception e)
 		{
