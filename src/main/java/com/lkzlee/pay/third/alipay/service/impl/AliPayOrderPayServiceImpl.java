@@ -16,7 +16,6 @@ import com.lkzlee.pay.third.alipay.dto.request.AliPayRefundOrderDto;
 import com.lkzlee.pay.third.alipay.service.AliPayOrderPayService;
 import com.lkzlee.pay.third.dto.AbstThirdPayDto;
 import com.lkzlee.pay.utils.CommonUtil;
-import com.lkzlee.pay.utils.HttpKit;
 import com.lkzlee.pay.utils.TreeMapUtil;
 
 @Service("aliPayOrderPayService")
@@ -97,7 +96,7 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 	public Object refundToPayService(AbstThirdPayDto paramDto) throws UnsupportedEncodingException
 	{
 
-		if (paramDto == null || !(paramDto instanceof AliPayOrderDto))
+		if (paramDto == null || !(paramDto instanceof AliPayRefundOrderDto))
 			throw new BusinessException("payParamDto 不能转换为支付宝dto，请检查");
 		AliPayRefundOrderDto refundParamDto = (AliPayRefundOrderDto) paramDto;
 		TreeMap<String, String> paramTreeMap = TreeMapUtil.getInitTreeMapAsc();
@@ -121,16 +120,17 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		paramTreeMap.put("detail_data", refundParamDto.getDetail_data());
 		String source = TreeMapUtil.getTreeMapString(paramTreeMap);
 		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
-		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
+		String signResult = SignTypeEnum.RSA.sign(source, privateKey);
 		paramTreeMap.put("sign", signResult);
-		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
+		paramTreeMap.put("sign_type", SignTypeEnum.RSA.getSignType());
 
 		try
 		{
-			LOG.info("@@支付宝退款请求参数url=" + ALIPAY_GATEWAY_NEW + " | param=" + TreeMapUtil.getTreeMapString(paramTreeMap));
-			String respConetent = HttpKit.post(ALIPAY_GATEWAY_NEW, paramTreeMap);
-			LOG.info("@@支付宝退款请求同步响应返回结果respConetent=" + respConetent);
-			return respConetent;
+			LOG.info("@@支付宝退款请求参数url=" + ALIPAY_GATEWAY_NEW + " | param="
+					+ TreeMapUtil.getTreeMapStringWithEncode(paramTreeMap, "UTF-8"));
+			String refundUrl = ALIPAY_GATEWAY_NEW + "?" + TreeMapUtil.getTreeMapStringWithEncode(paramTreeMap, "UTF-8");
+			LOG.info("@@支付宝退款请求同步响应返回结果refundUrl=" + refundUrl);
+			return refundUrl;
 		}
 		catch (Exception e)
 		{

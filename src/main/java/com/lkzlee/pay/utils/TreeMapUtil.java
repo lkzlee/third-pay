@@ -59,6 +59,15 @@ public class TreeMapUtil
 		return rs.toString().substring(1);
 	}
 
+	public static void encodeTreeMap(TreeMap<String, String> treeMap, String encode)
+			throws UnsupportedEncodingException
+	{
+		for (Entry<String, String> p : treeMap.entrySet())
+		{
+			treeMap.put(p.getKey(), URLEncoder.encode(p.getValue(), encode));
+		}
+	}
+
 	public static void setFiledParamToMapInfo(Object weixinResult, TreeMap<String, String> sourceMap, Class clazz)
 			throws IllegalAccessException
 	{
