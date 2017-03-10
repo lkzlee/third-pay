@@ -81,10 +81,10 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		 * 商品类型：1表示实物类商品 0表示虚拟类商品
 		 */
 		paramTreeMap.put("goods_type", "0");
-		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
 		String source = TreeMapUtil.getTreeMapString(paramTreeMap);
 		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
 		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
+		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
 		paramTreeMap.put("sign", signResult);
 		String payUrl = ALIPAY_GATEWAY_NEW + "?" + TreeMapUtil.getTreeMapString(paramTreeMap);
 		LOG.info("@@支付宝下单支付url=" + payUrl);
@@ -120,11 +120,11 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		paramTreeMap.put("batch_no=", URLEncoder.encode(refundParamDto.getBatch_no(), "UTF-8"));
 		paramTreeMap.put("batch_num=", URLEncoder.encode(refundParamDto.getBatch_num(), "UTF-8"));
 		paramTreeMap.put("detail_data=", URLEncoder.encode(refundParamDto.getRefund_date(), "UTF-8"));
-		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
 		String source = TreeMapUtil.getTreeMapString(paramTreeMap);
 		String privateKey = AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY);
 		String signResult = SignTypeEnum.MD5.sign(source, privateKey);
 		paramTreeMap.put("sign", signResult);
+		paramTreeMap.put("sign_type", SignTypeEnum.MD5.getSignType());
 
 		try
 		{
