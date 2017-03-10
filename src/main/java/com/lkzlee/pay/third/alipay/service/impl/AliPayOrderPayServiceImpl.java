@@ -108,8 +108,8 @@ public class AliPayOrderPayServiceImpl implements AliPayOrderPayService
 		paramTreeMap.put("notify_url", refundParamDto.getNotify_url());
 
 		//		paramTreeMap.put("seller_email=" + aliPayDto.getService());
-		//		paramTreeMap.put("seller_user_id",
-		//				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_SELLER_ID, "2088102168716583"));
+		paramTreeMap.put("seller_user_id",
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_SELLER_ID, "2088102168716583"));
 		/***
 		 * 	
 		退款请求的当前时间。格式为：yyyy-MM-dd HH:mm:ss。
