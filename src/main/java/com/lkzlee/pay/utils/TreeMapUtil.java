@@ -1,6 +1,8 @@
 package com.lkzlee.pay.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -42,6 +44,17 @@ public class TreeMapUtil
 		for (Entry<String, String> key : treeMap.entrySet())
 		{
 			rs.append("&" + key.getKey() + "=" + key.getValue());
+		}
+		return rs.toString().substring(1);
+	}
+
+	public static String getTreeMapStringWithEncode(TreeMap<String, String> treeMap, String encode)
+			throws UnsupportedEncodingException
+	{
+		StringBuffer rs = new StringBuffer();
+		for (Entry<String, String> key : treeMap.entrySet())
+		{
+			rs.append("&" + key.getKey() + "=" + URLEncoder.encode(key.getValue(), encode));
 		}
 		return rs.toString().substring(1);
 	}

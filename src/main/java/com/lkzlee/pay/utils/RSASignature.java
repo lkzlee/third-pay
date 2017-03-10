@@ -37,7 +37,7 @@ public class RSASignature
 		try
 		{
 			Signature sigEng = Signature.getInstance("SHA1withRSA");
-			byte[] pribyte = CommonUtil.hexStrToBytes(privateKey.trim());
+			byte[] pribyte = Base64.decode(privateKey);
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pribyte);
 			KeyFactory fac = KeyFactory.getInstance("RSA");
 
@@ -46,7 +46,7 @@ public class RSASignature
 			sigEng.update(source.getBytes(encode));
 
 			byte[] signature = sigEng.sign();
-			return CommonUtil.bytesToHexStr(signature);
+			return new String(Base64.encode(signature));
 		}
 		catch (Exception e)
 		{

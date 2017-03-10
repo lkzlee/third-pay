@@ -59,12 +59,14 @@ public abstract class AliPayNotfiyController extends AbstPayNotfiyController
 		if (sourceMap.containsKey("sign"))
 			sign = sourceMap.get("sign");
 		sourceMap.remove("sign");
+		sourceMap.remove("sign_type");
 		String source = TreeMapUtil.getTreeMapString(sourceMap);
-		String calcSign = SignTypeEnum.MD5.sign(source,
-				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PRIVATE_KEY));
-		if (!calcSign.equals(sign))
+		boolean isRight = SignTypeEnum.RSA.verifySign(source,
+				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PUBLIC_KEY), sign);
+
+		if (!isRight)
 		{
-			LOG.fatal("验签不通过，请检查，calcSign=" + calcSign + ",sign=" + sign);
+			LOG.fatal("验签不通过，请检查，isRight=" + isRight + ",sign=" + sign);
 			return false;
 		}
 		return true;

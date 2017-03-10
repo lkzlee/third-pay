@@ -16,6 +16,11 @@ public class ConfigConstant
 	 * 支付宝商户私钥
 	 */
 	public static final String ALIPAY_PRIVATE_KEY = "aliPayPrivateKey";
+
+	/***
+	 * 支付宝商户公钥
+	 */
+	public static final String ALIPAY_PUBLIC_KEY = "aliPayPublicKey";
 	/***
 	 * 支付宝商户ID
 	 */
