@@ -66,7 +66,7 @@ public abstract class AliPayNotfiyController extends AbstPayNotfiyController
 
 		if (!isRight)
 		{
-			LOG.fatal("验签不通过，请检查，isRight=" + isRight + ",sign=" + sign);
+			LOG.fatal("验签不通过，请检查，isRight=" + isRight + ",sign=" + sign + ",source=" + source);
 			return false;
 		}
 		return true;

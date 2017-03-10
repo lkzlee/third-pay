@@ -1,6 +1,5 @@
 package com.lkzlee.pay.third.alipay.dto.response;
 
-
 /***
  * 支付宝即时支付通知返回参数定义
  * @author lkzlee
@@ -279,7 +278,8 @@ public class AliPayOrderNotifyDto extends AbstAliPayBaseDto
 				+ buyer_email + ", seller_id=" + seller_id + ", buyer_id=" + buyer_id + ", price=" + price
 				+ ", total_fee=" + total_fee + ", quantity=" + quantity + ", body=" + body + ", discount=" + discount
 				+ ", is_total_fee_adjust=" + is_total_fee_adjust + ", use_coupon=" + use_coupon
-				+ ", extra_common_param=" + extra_common_param + ", business_scene=" + business_scene + "]";
+				+ ", extra_common_param=" + extra_common_param + ", business_scene=" + business_scene + "]，super="
+				+ super.toString();
 	}
 
 }

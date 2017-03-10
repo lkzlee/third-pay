@@ -1,6 +1,5 @@
 package com.lkzlee.pay.third.alipay.dto.response;
 
-
 /***
  * 支付宝即时支付通知返回参数定义
  * @author lkzlee
@@ -54,6 +53,6 @@ public class AliPayRefundNotifyDto extends AbstAliPayBaseDto
 	public String toString()
 	{
 		return "AliPayRefundNotifyDto [batch_no=" + batch_no + ", success_num=" + success_num + ", result_details="
-				+ result_details + "]";
+				+ result_details + "],super=" + super.toString();
 	}
 }

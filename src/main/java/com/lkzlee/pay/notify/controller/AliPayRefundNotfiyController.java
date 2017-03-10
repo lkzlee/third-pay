@@ -71,7 +71,7 @@ public abstract class AliPayRefundNotfiyController extends AbstPayNotfiyControll
 				AlipayConfigBean.getPayConfigValue(ConfigConstant.ALIPAY_PUBLIC_KEY), sign);
 		if (!isRight)
 		{
-			LOG.fatal("验签不通过，请检查，isRight=" + isRight + ",sign=" + sign);
+			LOG.fatal("验签不通过，请检查，isRight=" + isRight + ",sign=" + sign + ",source=" + source);
 			return false;
 		}
 		return true;
