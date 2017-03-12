@@ -70,5 +70,9 @@ public class ConfigConstant
 	 * 微信token
 	 */
 	public static final String WEIXIN_APP_TOKEN = "weiXinAppToken";
+	/**
+	 * 微信模板消息Id
+	 */
+	public static final String WEIXIN_MSG_TEMPLATE_ID = "weiXinMsgTemplateId";
 
 }
